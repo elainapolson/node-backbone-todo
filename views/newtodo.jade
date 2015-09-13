@@ -1,8 +1,0 @@
-extends layout
-
-block content
-    h1= title
-    form#formAddUser(name="addtodo",method="post",action="/addtodo")
-        input#inputTodoName(type="text", placeholder="todo name", name="todoname")
-        input#inputTodoCompleted(type="text", placeholder="completed", name="todocompleted")
-        button#btnSubmit(type="submit") submit

@@ -1,4 +1,5 @@
 var express = require('express');
+var http = require('http');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -7,11 +8,11 @@ var bodyParser = require('body-parser');
 
 // New Code
 var mongo = require('mongodb');
-var monk = require('monk');
-var db = monk('localhost:27017/todo-app');
+var mongoskin = require('mongoskin');
+var db = mongoskin.db('mongodb://localhost:27017/todo?auto_reconnect', {safe:true});
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+var routes = require('./routes');
+var todos = require('./routes/todos');
 
 var app = express();
 
@@ -27,14 +28,33 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Make our db accessible to our router
-app.use(function(req,res,next){
-    req.db = db;
-    next();
-});
+// To process LESS stylesheets into CSS ones
+app.use(require('less-middleware')({
+  src: __dirname + '/public', 
+  compress: true 
+}));
 
-app.use('/', routes);
-app.use('/users', users);
+// Make our db accessible to our router
+app.use(function(req, res, next) {
+  req.db = {};
+  req.db.todos = db.collection('todos');
+  next();
+})
+
+app.locals.appname = "Elaina's Todo App"
+
+
+// date library for parsing, validating, manipulating, and formatting dates.
+app.locals.moment = require('moment');
+
+// define routes
+app.get('/', routes.index);
+app.get('/todos', todos.list);
+app.post('/todos', todos.add);
+app.post('/todos/:todo_id', todos.markCompleted);
+app.delete('/todos/:todo_id', todos.del);
+app.get('/todos/completed', todos.completed);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,0 +1,26 @@
+extends layout
+
+block content
+
+  .menu
+    h2 Menu
+    ul.nav.nav-pills
+      li
+        a(href='/') Home
+      li
+        a(href='/todos') Todo List
+      li.active
+        a(href="/todos/completed") Completed
+
+  h1= title
+
+  .list
+    if (todos.length === 0)
+      | No todos.
+    each todo, index in todos
+      .item
+        div.num
+          span=index+1
+            |.&nbsp;
+        div.name.completed-todo
+          span.name=todo.name + ' (Completed at: ' + moment(todo.completeTime).format("YYYY/MM/DD") + ')'
