@@ -1,5 +1,5 @@
-module.exports = {
-    index: function(req, res) {
-        res.render('index', { title: 'Todo App'});
-    }
-};
+// module.exports = {
+//     index: function(req, res) {
+//         res.render('index', { title: 'Todo App'});
+//     }
+// };

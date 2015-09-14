@@ -12,12 +12,88 @@ var routes = require('./app/routes');
 var app = express();
 
 //routes list:
-routes.initialize(app);
+// routes.initialize(app);
+
+// home page
+app.get( '/', function( request, response ) {
+        response.render('index', { title: 'Todo App'});
+});
+
+//Get a list of all todos that aren't completed
+app.get( '/todos', function( request, response ) {
+    return TodoModel.find({completed: false}, function( err, todos ) {
+        if (err) return console.log(err);
+        response.render('todos', {
+          title: 'Todo List',
+          todos: todos || []
+        });
+    });
+});
+
+//Get a list of all todos that are completed
+app.get('/todos/completed', function(request, response) {
+    return TodoModel.find({completed: true}, function( err, todos ) {
+        if (err) return console.log(err);
+        response.render('todos_completed', {
+          title: 'Completed',
+          todos: todos || []
+        });
+    });
+});
+
+//Insert a new todo
+app.post( '/api/todos', function( request, response ) {
+    var todo = new TodoModel({
+        name: request.body.name,
+    });
+
+    return todo.save( function( err ) {
+        if( !err ) {
+            console.log( 'created' );
+            return response.send( book );
+        } else {
+            console.log( err );
+        }
+    });
+});
+
+// get a todo 
+app.post('/todos/:todo_id', function(req, res) {
+    return TodoModel.findById( request.params.id, function( err, todo ) {
+        todo.completed = true;
+
+        return todo.save( function( err ) {
+            if( !err ) {
+                console.log( 'todo updated' );
+                return response.send( todo );
+            } else {
+                console.log( err );
+            }
+        });
+    });
+});
+
+//Delete a book
+app.delete( '/api/books/:id', function( request, response ) {
+    console.log( 'Deleting book with id: ' + request.params.id );
+    return BookModel.findById( request.params.id, function( err, book ) {
+        return book.remove( function( err ) {
+            if( !err ) {
+                console.log( 'Book removed' );
+                return response.send( '' );
+            } else {
+                console.log( err );
+            }
+        });
+    });
+});
+
+
 
 // view engine setup
 app.set('port', process.env.PORT || 3300);
-app.set('views', path.join(__dirname, 'views'));
-// app.set('views', __dirname + '/views');
+// app.set('views', path.join(__dirname, 'views'));
+app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 // express js middleware
@@ -64,13 +140,27 @@ app.use(function(err, req, res, next) {
 });
 
 //connect to the db server:
-mongoose.connect('mongodb://localhost/MyApp');
-mongoose.connection.on('open', function() {
-    console.log("Connected to Mongoose...");
+// mongoose.connect('mongodb://localhost/MyApp');
+// mongoose.connection.on('open', function() {
+//     console.log("Connected to Mongoose...");
 
-    // check if the db is empty, if so seed it with some contacts:
-    seeder.check();
+//     // check if the db is empty, if so seed it with some contacts:
+//     seeder.check();
+// });
+
+//Connect to database
+mongoose.connect( 'mongodb://localhost/todolist_database' );
+
+//Schemas
+var Todo = new mongoose.Schema({
+    name: String,
+    completed: Boolean,
+    createTime: Date
 });
+
+//Models
+var TodoModel = mongoose.model( 'Todo', Todo );
+
 
 // define app name
 app.locals.appname = "Elaina's Todo App"

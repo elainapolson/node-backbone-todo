@@ -4,7 +4,7 @@ block content
 
   .menu
     h2 Menu
-    ul.nav.nav-pills
+    ul
       li
         a(href='/') Home
       li.active
@@ -13,15 +13,23 @@ block content
         a(href="/todos/completed") Completed
   h1= title
 
-  .list
-    
-    .item.add-todo
-      form(action='/todos', method='post')
-        input(type='hidden', value=locals._csrf, name='_csrf')
-        div.name
+
+
+
+  script(id="todoTemplate" type="text/template")
+    ul
+      li
+        name
+
+    button(class="delete"). 
+      Delete
+
+    #todos
+
+      form(id='addTodo', action='/todos', method='post')
           input(type='text', name='name', placeholder='Add a new todo')
-        div.add
           input.btn.btn-primary.btn-sm(type="submit", value='Add')
+    
     
     if (todos.length === 0)
       | No todos.
@@ -41,7 +49,7 @@ block content
             input(type='hidden', value=todo._id.toString(), name='id')
             input(type='hidden', value='true', name='completed')
             input(type='hidden', value=locals._csrf, name='_csrf')
-            input(type='submit', class='btn btn-success btn-xs todo-done', value='Done')
+            input(type='submit', class='btn btn-success', value='Done')
 
         div.delete
           form(method='POST', action='/todos/#{todo._id}?_method=DELETE')

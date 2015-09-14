@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Todo App</title>
+        <link rel="stylesheet" href="css/screen.css">
+    </head>
+    <body>
+
+        <script id="todoTemplate" type="text/template">
+            <ul>
+                <li><%= name %></li>
+                <li><%= createTime %></li>
+            </ul>
+
+        <button class="delete">Delete</button>
+        </script>
+
+        script(id="todoTemplate" type="text/template")
+        ul
+        li
+            name
+        ul
+        
+
+        <script src="js/lib/jquery.min.js"></script>
+        <script src="js/lib/underscore-min.js"></script>
+        <script src="js/lib/backbone-min.js"></script>
+        <script src="js/models/book.js"></script>
+        <script src="js/collections/library.js"></script>
+        <script src="js/views/book.js"></script>
+        <script src="js/views/library.js"></script>
+        <script src="js/app.js"></script>
+    </body>
+    <div id="todos">
+    <form id="addTodo" action="#">
+        <div>
+            <label for="name">Name: </label><input id="name" type="text" />
+            <button id="add">Add</button>
+        </div>
+    </form>
+</div>
+</html>
