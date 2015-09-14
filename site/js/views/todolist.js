@@ -3,13 +3,33 @@ var app = app || {};
 app.TodolistView = Backbone.View.extend({
     el: '#todos',
 
-    initialize: function( initialTodos ) {
-        this.collection = new app.Todolist();    // UPDATED
-        this.collection.fetch({reset: true});   // NEW
+    initialize: function() {
+        this.collection = new app.Todolist();
+        this.collection.fetch({reset: true});
         this.render();
 
+        // make the view render again when a new model is added
         this.listenTo( this.collection, 'add', this.renderTodo );
-        this.listenTo( this.collection, 'reset', this.render ); // NEW
+        this.listenTo( this.collection, 'reset', this.render );
+    },
+
+    events:{
+    'click #add':'addTodo'
+    },
+
+    addTodo: function( e ) {
+        e.preventDefault();
+
+        var formData = {};
+
+        $( '#addTodo div' ).children( 'input' ).each( function( i, el ) {
+            if( $( el ).val() != '' )
+            {
+                formData[ el.id ] = $( el ).val();
+            }
+        });
+
+        this.collection.add( new app.Todo( formData ) );
     },
 
     // render library by rendering each book in its collection
@@ -29,21 +49,4 @@ app.TodolistView = Backbone.View.extend({
     }
 });
 
-events:{
-    'click #add':'addTodo'
-},
 
-addTodo: function( e ) {
-    e.preventDefault();
-
-    var formData = {};
-
-    $( '#addTodo div' ).children( 'input' ).each( function( i, el ) {
-        if( $( el ).val() != '' )
-        {
-            formData[ el.id ] = $( el ).val();
-        }
-    });
-
-    this.collection.create( formData );
-},
