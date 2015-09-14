@@ -29,7 +29,7 @@ app.TodolistView = Backbone.View.extend({
             }
         });
 
-        this.collection.add( new app.Todo( formData ) );
+        this.collection.create( formData );
     },
 
     // render library by rendering each book in its collection

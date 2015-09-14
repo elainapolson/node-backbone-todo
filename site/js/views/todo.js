@@ -21,7 +21,7 @@ app.TodoView = Backbone.View.extend({
     completeTodo: function() {
 
       this.model.attributes.completed = true
-      this.save;
+      this.model.save;
       this.render();
 
     },
