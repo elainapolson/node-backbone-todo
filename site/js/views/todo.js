@@ -18,6 +18,7 @@ app.TodoView = Backbone.View.extend({
       this.remove();
     },
 
+    // this isn't working right now... when refresh the page, it goes back to false
     completeTodo: function() {
 
       this.model.attributes.completed = true

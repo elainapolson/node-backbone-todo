@@ -32,15 +32,15 @@ app.TodolistView = Backbone.View.extend({
         this.collection.create( formData );
     },
 
-    // render library by rendering each book in its collection
+    // render todolist by rendering each todo in its collection
     render: function() {
         this.collection.each(function( item ) {
             this.renderTodo( item );
         }, this );
     },
 
-    // render a book by creating a BookView and appending the
-    // element it renders to the library's element
+    // render a todo by creating a todoView and appending the
+    // element it renders to the todolists's element
     renderTodo: function( item ) {
         var todoView = new app.TodoView({
             model: item

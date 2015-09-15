@@ -14,15 +14,14 @@ var app = express();
 //Connect to database
 mongoose.connect( 'mongodb://localhost/todolist_db' );
 
-//Schemas
-
+//Schema
 var Todo = new mongoose.Schema({
   title: String,
   completed: Boolean,
   createTime: Date
 });
 
-//Models
+//Model
 var TodoModel = mongoose.model( 'Todo', Todo );
 
 // express js middleware
@@ -98,7 +97,7 @@ app.put( '/api/todos/:id', function( request, response ) {
   });
 });
 
-//Delete a book
+//Delete a todo
 app.delete( '/api/todos/:id', function( request, response ) {
   console.log( 'Deleting todo with id: ' + request.params.id );
   return TodoModel.findById( request.params.id, function( err, todo ) {
@@ -118,6 +117,3 @@ var port = 3300;
 app.listen( port, function() {
   console.log( 'Express server listening on port %d in %s mode', port, app.settings.env );
 });
-
-
-

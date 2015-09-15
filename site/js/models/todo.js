@@ -1,14 +1,14 @@
 var app = app || {};
 
-
 app.Todo = Backbone.Model.extend({
     defaults: {
         title: '',
         completed: false,
-        createTime: new Date()
+        createTime: moment().format()
     },
     
 
+    // models that didn't pass validations will be added to page on first click, but when you refresh page, they'll be gone
     validate: function(attributes) {
         var takenTitles = this.collection.models.map(function(model) { return model.attributes.title });
         takenTitles.pop();
