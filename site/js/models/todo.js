@@ -1,10 +1,25 @@
 var app = app || {};
 
+
 app.Todo = Backbone.Model.extend({
     defaults: {
         title: '',
         completed: false,
         createTime: new Date()
+    },
+    
+
+    validate: function(attributes) {
+        var takenTitles = this.collection.models.map(function(model) { return model.attributes.title });
+        takenTitles.pop();
+
+        if (attributes.title == ""){
+            return 'Please fill out title field.';
+        }
+        if (takenTitles.indexOf(attributes.title) >= 0) {
+          debugger;
+            return 'That todo has already been added to the list!';
+        }
     },
 
 
